@@ -20,20 +20,19 @@ class Dispatcher:
 
     def register_for(self, message_type: Type[Msg]):
         def wrap(f: Callable[[Msg], Any]):
-            self._rg[message_type.__name__] = (message_type, f)
+            self._rg[message_type.name()] = (message_type, f)
             return f
         return wrap
 
     def dispatch(self, io: Na):
         for message in self._read_to_end(io):
-            msg_class_name, payload = Message.split(message)
+            msg_class_name = Message.get_name(message)
             try:
                 message_type, callback = self._rg[msg_class_name]
             except KeyError:
                 print(f'No handler for message type: {msg_class_name}')
                 return
-
-            callback(message_type.decode(payload))
+            callback(message_type.decode(message))
 
     @staticmethod
     def _read_to_end(io: Na) -> Generator[bytes, None, None]:
