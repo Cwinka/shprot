@@ -21,3 +21,4 @@ if __name__ == '__main__':
         while True:
             conn, address = server.accept()
             d.dispatch(conn)
+            conn.close()

@@ -9,6 +9,5 @@ if __name__ == '__main__':
             Lu(client='foo'),
             Lu(client='foo'),
             Ha(client='foo'),
-            Lu(client='foo'),
         ]
         conn.send(b''.join(m.encode() for m in messages))
